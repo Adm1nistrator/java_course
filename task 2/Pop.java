@@ -5,10 +5,13 @@ import java.util.Stack;
  * Created by anykey on 14.05.16.
  */
 class Pop implements Cmd {
-    private Stack<Double> stack;
     @Override
     public void exec(Stack<Double> stack, Map<String, Double> define, String[] strings) {
-        stack.pop();
+        if (stack.size() == 0){
+            System.out.println("Невозможно выполнить команду. Стек пуст!");
+        }  else {
+            stack.pop();
+        }
 
     }
 }
