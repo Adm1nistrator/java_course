@@ -1,14 +1,18 @@
+package task2;
+
+import task2.command.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by anykey on 14.05.16.
  */
-class Commands {
-    private final Map<String, Cmd> cmdMap = new HashMap<>();
-    private final static Commands inst = new Commands();
+class CommandRegistry {
+    private final Map<String, Command> cmdMap = new HashMap<>();
+    private final static CommandRegistry inst = new CommandRegistry();
 
-    private Commands() {
+    private CommandRegistry() {
         cmdMap.put("push", new Push());
         cmdMap.put("pop", new Pop());
         cmdMap.put("+", new Add());
@@ -22,11 +26,11 @@ class Commands {
     }
 
 
-    Cmd getCommandByName(String commandName) {
+    Command getCommandByName(String commandName) {
         return cmdMap.get(commandName);
     }
 
-    static Commands getInst() {
+    static CommandRegistry getInst() {
         return inst;
     }
 }
