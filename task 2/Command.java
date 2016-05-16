@@ -11,7 +11,10 @@ class Command {
     private Command() {
         cmdMap.put("push", new Push());
         cmdMap.put("pop", new Pop());
-        cmdMap.put("add", new Add());
+        cmdMap.put("+", new Add());
+        cmdMap.put("-", new Difference());
+        cmdMap.put("*", new Multiply());
+        cmdMap.put("/", new Divide());
         cmdMap.put("define", new Define());
         cmdMap.put("print", new Print());
 
