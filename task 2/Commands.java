@@ -4,17 +4,18 @@ import java.util.Map;
 /**
  * Created by anykey on 14.05.16.
  */
-class Command {
+class Commands {
     private final Map<String, Cmd> cmdMap = new HashMap<>();
-    private final static Command inst = new Command();
+    private final static Commands inst = new Commands();
 
-    private Command() {
+    private Commands() {
         cmdMap.put("push", new Push());
         cmdMap.put("pop", new Pop());
         cmdMap.put("+", new Add());
         cmdMap.put("-", new Difference());
         cmdMap.put("*", new Multiply());
         cmdMap.put("/", new Divide());
+        cmdMap.put("sqrt", new Sqrt());
         cmdMap.put("define", new Define());
         cmdMap.put("print", new Print());
 
@@ -25,7 +26,7 @@ class Command {
         return cmdMap.get(commandName);
     }
 
-    static Command getInst() {
+    static Commands getInst() {
         return inst;
     }
 }
