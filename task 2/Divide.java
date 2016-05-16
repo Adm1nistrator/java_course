@@ -4,7 +4,7 @@ import java.util.Stack;
 /**
  * Created by anykey on 16.05.16.
  */
-public class Divide implements Cmd {
+class Divide implements Cmd {
     @Override
     public void exec(Stack<Double> stack, Map<String, Double> define, String[] strings) {
         if (stack.size() == 0){
