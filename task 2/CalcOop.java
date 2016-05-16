@@ -14,6 +14,8 @@ class CalcOop {
         String s;
         Stack<Double> stack = new Stack<>();
 
+      /*  BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("input.txt"))*/
+
         if (args.length > 0) {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
@@ -21,7 +23,7 @@ class CalcOop {
         }
 
         Map<String, Double> varMap = new HashMap<>();
-        Command singleton = Command.getInst();
+        Commands singleton = Commands.getInst();
 
         while (scanner.hasNextLine()) {
             s = scanner.nextLine();
