@@ -9,8 +9,7 @@ import java.util.Stack;
 public class Pop implements Command {
     @Override
     public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
-        if (commandArgs.length>0)
-        {
+        if (commandArgs.length > 0) {
             System.out.println("Для данной команды аргументы не требуются");
         }
         if (stack.size() == 0) {

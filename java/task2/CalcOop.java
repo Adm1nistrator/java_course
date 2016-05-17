@@ -20,7 +20,8 @@ class CalcOop {
         if (args.length > 0) {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
-            scanner = new Scanner(System.in);
+            /*scanner = new Scanner(System.in);*/
+            scanner = new Scanner(new FileInputStream("cmd.txt"));
         }
 
         Map<String, Double> variablesMap = new HashMap<>();
@@ -35,15 +36,14 @@ class CalcOop {
             }
 
             String commandName = commandLineParts[0];
-            if (commandName.equals("exit"))
-            {
+            if (commandName.equals("exit")) {
                 break;
             }
 
             Command command = registry.getCommandByName(commandName);
 
 
-            String[] commandArgs = Arrays.copyOfRange(commandLineParts,1,commandLineParts.length);
+            String[] commandArgs = Arrays.copyOfRange(commandLineParts, 1, commandLineParts.length);
 
             if (command != null) {
                 command.exec(stack, variablesMap, commandArgs);

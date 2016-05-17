@@ -9,8 +9,7 @@ import java.util.Stack;
 public class Push implements Command {
     public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
 
-        if (commandArgs.length!=1)
-        {
+        if (commandArgs.length != 1) {
             System.out.println("Для выполенния данной операции необходим 1 аргумент");
             return;
         }
@@ -22,8 +21,7 @@ public class Push implements Command {
         } else {
             try {
                 stack.push(Double.valueOf(arg));
-            } catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("Значение аргумета должно быть числовым");
             }
         }

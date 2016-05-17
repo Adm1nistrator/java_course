@@ -9,14 +9,13 @@ import java.util.Stack;
 public class Sqrt implements Command {
     @Override
     public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
-        if (commandArgs.length>0)
-        {
+        if (commandArgs.length > 0) {
             System.out.println("Для данной команды аргументы не требуются");
         }
-        if (stack.size() == 0){
+        if (stack.size() == 0) {
             System.out.println("Невозможно выполнить команду. Стек пуст!");
-        }  else {
-            stack.push(Math.sqrt(stack.lastElement()));
+        } else {
+            stack.push(Math.sqrt(stack.pop()));
         }
     }
 }

@@ -8,14 +8,13 @@ import java.util.Stack;
  */
 public class Print implements Command {
     public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
-        if (commandArgs.length>0)
-        {
+        if (commandArgs.length > 0) {
             System.out.println("Для данной команды аргументы не требуются");
         }
-        if (stack.size() == 0){
+        if (stack.size() == 0) {
             System.out.println("Невозможно выполнить команду. Стек пуст!");
         } else {
-            System.out.println(stack.peek());
+            System.out.println(stack.pop());
         }
     }
 }
