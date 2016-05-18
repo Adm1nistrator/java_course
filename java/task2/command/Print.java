@@ -14,7 +14,7 @@ public class Print implements Command {
         if (stack.size() == 0) {
             System.out.println("Невозможно выполнить команду. Стек пуст!");
         } else {
-            System.out.println(stack.pop());
+            System.out.println(stack.lastElement());
         }
     }
 }
