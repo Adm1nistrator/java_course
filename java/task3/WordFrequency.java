@@ -28,8 +28,16 @@ public class WordFrequency {
             int i = 1;
             wordFrequencyMap.put(words[i], 1);
         }
+        Integer count ;
+        for (String word: words)
+        {
+            count=wordFrequencyMap.get(word);
+            wordFrequencyMap.put(word,count==null ? 1 : count+1);
+
+        }
 
 
+/*
         int count = 0;
         for (String word : words) {
             for (String otherWord : words) {
@@ -39,7 +47,7 @@ public class WordFrequency {
             }
             wordFrequencyMap.put(word, count);
             count = 0;
-        }
+        }*/
 
         for (Map.Entry<String, Integer> entry : wordFrequencyMap.entrySet()) {
             System.out.println("Слово: " + entry.getKey() + " Частота: " + entry.getValue() + " Частота: "+((100*entry.getValue())/words.length)+" %");
