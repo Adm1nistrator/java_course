@@ -11,7 +11,7 @@ public class WordFrequency {
     public static void main(String[] args) throws IOException {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
-        String inputFileName = "task3.txt";
+        String inputFileName = "big.txt";
         String outputFileName = "WordFrequency.csv";
         String[] words = {};
         String input;
@@ -20,6 +20,10 @@ public class WordFrequency {
         BufferedReader fileReader = new BufferedReader(new FileReader(inputFileName));
         //читаем фаил по строкам и парсим в map
         while ((input = fileReader.readLine()) != null) {
+            if (input.equals(""))
+            {
+                continue;
+            }
             Pattern p = Pattern.compile("[^\\wа-яА-Я]+");
             words = p.split(input);
             Integer count;
