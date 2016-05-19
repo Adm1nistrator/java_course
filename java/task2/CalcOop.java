@@ -20,7 +20,7 @@ class CalcOop {
         if (args.length > 0) {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
-           scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
            /*scanner = new Scanner(new FileInputStream("cmd.txt"));*/
         }
 
@@ -43,7 +43,6 @@ class CalcOop {
 
             Command command = registry.getCommandByName(commandName);
 
-
             String[] commandArgs = Arrays.copyOfRange(commandLineParts, 1, commandLineParts.length);
 
             if (command != null) {
@@ -51,7 +50,6 @@ class CalcOop {
             } else {
                 System.out.println("Команда не найдена");
             }
-
 
         }
     }
