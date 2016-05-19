@@ -13,23 +13,24 @@ public class WordFrequency {
         String inputFileName = bufferedReader.readLine();  */
         String inputFileName = "big.txt";
         String outputFileName = "WordFrequency.csv";
-        String[] words = {};
         String input;
-        Integer countWords = 0;
+        Integer wordsCount = 0;
         Map<String, Integer> wordFrequencyMap = new HashMap<>();
         BufferedReader fileReader = new BufferedReader(new FileReader(inputFileName));
         //читаем фаил по строкам и парсим в map
         while ((input = fileReader.readLine()) != null) {
-            if (input.equals(""))
+            if (input.equals("") || (input.trim().length()==0))
             {
                 continue;
             }
+            String[] words = {};
             Pattern p = Pattern.compile("[^\\wа-яА-Я]+");
             words = p.split(input);
-            Integer count;
+
 
             for (String word : words) {
-                countWords++;
+                Integer count;
+                wordsCount++;
                 count = wordFrequencyMap.get(word);
                 wordFrequencyMap.put(word, count == null ? 1 : count + 1);
 
@@ -51,7 +52,7 @@ public class WordFrequency {
         });
 
 
-        PrintWriter PrintWriter = new PrintWriter(new File(outputFileName));
+        PrintWriter printWriter = new PrintWriter(new File(outputFileName));
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Слово");
         stringBuilder.append(',');
@@ -66,12 +67,12 @@ public class WordFrequency {
             stringBuilder.append(',');
             stringBuilder.append(entry.getValue());
             stringBuilder.append(',');
-            stringBuilder.append(100*entry.getValue()/countWords);
+            stringBuilder.append(100*entry.getValue()/wordsCount);
             stringBuilder.append('\n');
         }
 
-        PrintWriter.write(stringBuilder.toString());
-        PrintWriter.close();
+        printWriter.write(stringBuilder.toString());
+        printWriter.close();
 
 
 
