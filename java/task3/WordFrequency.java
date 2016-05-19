@@ -32,8 +32,6 @@ public class WordFrequency {
             }
         }
 
-
-
         List<Map.Entry<String, Integer>> wordFrequencyList = new ArrayList<Map.Entry<String, Integer>>(wordFrequencyMap.entrySet());
         System.out.println("\n==> Size of Entry list: " + wordFrequencyList.size());
         for (Map.Entry<String, Integer> temp : wordFrequencyList) {
@@ -42,10 +40,14 @@ public class WordFrequency {
        Collections.sort(wordFrequencyList, new Comparator<Map.Entry<String, Integer>>() {
            @Override
            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-               return o2.getValue().compareTo(o1.getValue());
+            if (o2.getValue().equals(o1.getValue()))
+            {
+
+                  return o1.getKey().compareTo(o2.getKey());
+               }
+               else return o2.getValue().compareTo(o1.getValue());
            }
        });
-
 
         System.out.println("\n Sorted List " + wordFrequencyList.size());
         for (Map.Entry<String, Integer> temp : wordFrequencyList) {
