@@ -12,13 +12,9 @@ public class WordFrequency {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
         String inputFileName = "big.txt";
-/*      File file = new File(args[0]);*/
-        File file = new File(inputFileName);
         String outputFileName = "WordFrequency.csv";
-        Integer wordsCount = 0;
         Map<String, Integer> wordFrequencyMap = new HashMap<>();
         String input = "";
-        Integer i = 0;
         ArrayList<String> words = new ArrayList<>();
         try {
             Reader fileInputStream = new InputStreamReader(new BufferedInputStream(new FileInputStream(inputFileName)));
@@ -41,7 +37,6 @@ public class WordFrequency {
 
         for (String word : words) {
             Integer count;
-            wordsCount++;
             count = wordFrequencyMap.get(word);
             wordFrequencyMap.put(word, count == null ? 1 : count + 1);
         }
@@ -59,25 +54,17 @@ public class WordFrequency {
         });
 
         PrintWriter printWriter = new PrintWriter(new File(outputFileName));
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Слово");
-        stringBuilder.append(',');
-        stringBuilder.append("Частота");
-        stringBuilder.append(',');
-        stringBuilder.append("Частота % ");
-        stringBuilder.append(',');
-        stringBuilder.append('\n');
+        Integer wordsCount=wordFrequencyList.size();
+        String outString;
+        outString = "Слово; Частота; Частота% ; Всего слов:"+wordsCount+"\n";
+        printWriter.write(outString);
 
         for (Map.Entry<String, Integer> entry : wordFrequencyList) {
-            double percentFrequency = 100 * entry.getValue() / wordsCount;
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append(',');
-            stringBuilder.append(entry.getValue());
-            stringBuilder.append(',');
-            stringBuilder.append(percentFrequency);
-            stringBuilder.append('\n');
+
+            double percentFrequency = (double) (entry.getValue()*100) / wordsCount;
+            outString = String.format(entry.getKey() + ";" + entry.getValue() + ";" +"%1$+2.6f"+"%n",percentFrequency);
+            printWriter.write(outString);
         }
-        printWriter.write(stringBuilder.toString());
         printWriter.close();
     }
 }
