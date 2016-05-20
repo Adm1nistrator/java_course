@@ -11,35 +11,42 @@ public class WordFrequency {
     public static void main(String[] args) throws IOException {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
-        String inputFileName = "big.txt";
+        String inputFileName = "task3.txt";
+/*      File file = new File(args[0]);*/
+        File file = new File(inputFileName);
         String outputFileName = "WordFrequency.csv";
-        String input;
         Integer wordsCount = 0;
         Map<String, Integer> wordFrequencyMap = new HashMap<>();
-        BufferedReader fileReader = new BufferedReader(new FileReader(inputFileName));
-        //читаем фаил по строкам и парсим в map
-        while ((input = fileReader.readLine()) != null) {
-            if (input.equals("") || (input.trim().length()==0))
-            {
-                continue;
+        String input = "";
+        Integer i = 0;
+        ArrayList<String> words = new ArrayList<>();
+        try {
+            Reader fileInputStream = new InputStreamReader(new BufferedInputStream(new FileInputStream(inputFileName)));
+            char current;
+            while (fileInputStream.ready()) {
+                current = (char) fileInputStream.read();
+
+                if (Character.isLetterOrDigit(current)) {
+                    input = input + Character.toString(current);
+                } else {
+                    if (!input.equals("")) {
+                        words.add(input);
+                        input = "";
+                    }
+                }
             }
-            String[] words = {};
-            Pattern p = Pattern.compile("[^\\wа-яА-Я]+");
-            words = p.split(input);
-
-
-            for (String word : words) {
-                Integer count;
-                wordsCount++;
-                count = wordFrequencyMap.get(word);
-                wordFrequencyMap.put(word, count == null ? 1 : count + 1);
-
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        for (String word : words) {
+            Integer count;
+            wordsCount++;
+            count = wordFrequencyMap.get(word);
+            wordFrequencyMap.put(word, count == null ? 1 : count + 1);
+        }
 
         List<Map.Entry<String, Integer>> wordFrequencyList = new ArrayList<Map.Entry<String, Integer>>(wordFrequencyMap.entrySet());
-
         //сортировка
         Collections.sort(wordFrequencyList, new Comparator<Map.Entry<String, Integer>>() {
             @Override
@@ -50,7 +57,6 @@ public class WordFrequency {
                 } else return o2.getValue().compareTo(o1.getValue());
             }
         });
-
 
         PrintWriter printWriter = new PrintWriter(new File(outputFileName));
         StringBuilder stringBuilder = new StringBuilder();
@@ -63,21 +69,15 @@ public class WordFrequency {
         stringBuilder.append('\n');
 
         for (Map.Entry<String, Integer> entry : wordFrequencyList) {
+            double percentFrequency = 100 * entry.getValue() / wordsCount;
             stringBuilder.append(entry.getKey());
             stringBuilder.append(',');
             stringBuilder.append(entry.getValue());
             stringBuilder.append(',');
-            stringBuilder.append(100*entry.getValue()/wordsCount);
+            stringBuilder.append(percentFrequency);
             stringBuilder.append('\n');
         }
-
         printWriter.write(stringBuilder.toString());
         printWriter.close();
-
-
-
-
     }
-
-
 }
