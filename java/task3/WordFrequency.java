@@ -2,7 +2,6 @@ package task3;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Created by anykey on 18.05.16.
@@ -11,12 +10,13 @@ public class WordFrequency {
     public static void main(String[] args) throws IOException {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
-        String inputFileName = "big.txt";
+        String inputFileName = "crypto.txt";
         String outputFileName = "WordFrequency.csv";
         Map<String, Integer> wordFrequencyMap = new HashMap<>();
-        String input = "";
-        ArrayList<String> words = new ArrayList<>();
+        Integer wordsCount=0;
+        List<String> words = new ArrayList<>();
         try {
+            String input = "";
             Reader fileInputStream = new InputStreamReader(new BufferedInputStream(new FileInputStream(inputFileName)));
             char current;
             while (fileInputStream.ready()) {
@@ -26,6 +26,7 @@ public class WordFrequency {
                     input = input + Character.toString(current);
                 } else {
                     if (!input.equals("")) {
+                        wordsCount++;
                         words.add(input.toLowerCase());
                         input = "";
                     }
@@ -54,7 +55,6 @@ public class WordFrequency {
         });
 
         PrintWriter printWriter = new PrintWriter(new File(outputFileName));
-        Integer wordsCount=wordFrequencyList.size();
         String outString;
         outString = "Слово; Частота; Частота% ; Всего слов:"+wordsCount+"\n";
         printWriter.write(outString);
