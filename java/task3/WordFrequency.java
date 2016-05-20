@@ -11,7 +11,7 @@ public class WordFrequency {
     public static void main(String[] args) throws IOException {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
-        String inputFileName = "task3.txt";
+        String inputFileName = "big.txt";
 /*      File file = new File(args[0]);*/
         File file = new File(inputFileName);
         String outputFileName = "WordFrequency.csv";
@@ -30,7 +30,7 @@ public class WordFrequency {
                     input = input + Character.toString(current);
                 } else {
                     if (!input.equals("")) {
-                        words.add(input);
+                        words.add(input.toLowerCase());
                         input = "";
                     }
                 }
