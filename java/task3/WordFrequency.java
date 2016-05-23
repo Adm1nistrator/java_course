@@ -10,7 +10,7 @@ public class WordFrequency {
     public static void main(String[] args) throws IOException {
        /* BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String inputFileName = bufferedReader.readLine();  */
-        String inputFileName = "task3.txt";
+        String inputFileName = "crypto.txt";
         String outputFileName = "WordFrequency.csv";
         Map<String, Integer> wordFrequencyMap = new HashMap<>();
         Integer wordsCount = 0;
