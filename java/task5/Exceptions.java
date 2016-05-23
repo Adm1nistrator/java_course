@@ -22,9 +22,7 @@ public class Exceptions implements ExceptionGenerator {
     public void generateNumberFormatException() {
         String string = "2O0"; //  в Числе 2O0, один знако-это буква O.
         Integer integer = Integer.parseInt(string);
-
     }
-
 
     @Override
     public void generateStackOverflowError() {
@@ -39,6 +37,7 @@ public class Exceptions implements ExceptionGenerator {
     public void generateMyException(String message) throws MyException {
 
     }
+/*
 
     public static void printStackTrace(Throwable throwable) {
         System.out.println(throwable);
@@ -47,6 +46,7 @@ public class Exceptions implements ExceptionGenerator {
         }
         System.out.println();
     }
+*/
 
     public static void main(String[] args) {
 
@@ -54,33 +54,32 @@ public class Exceptions implements ExceptionGenerator {
         try {
             exceptions.generateNullPointerException();
         } catch (Exception e) {
-           printStackTrace(e);
+            e.printStackTrace();
         }
         try {
             exceptions.generateClassCastException();
         } catch (Exception e) {
+            e.printStackTrace();
 
-            printStackTrace(e);
         }
-
         try {
             exceptions.generateNumberFormatException();
 
         } catch (Exception e) {
-            printStackTrace(e);
+            e.printStackTrace();
         }
         try {
             exceptions.generateStackOverflowError();
 
         } catch (Exception e) {
-            printStackTrace(e);
+            e.printStackTrace();
         }
         try {
             exceptions.generateOutOfMemoryError();
 
         } catch (Exception e) {
 
-            printStackTrace(e);
+            e.printStackTrace();
         }
 
     }
