@@ -3,7 +3,7 @@ package task5;
 /**
  * Created by anykey on 23.05.16.
  */
-public class Exceptions implements ExceptionGenerator {
+public class Except implements ExceptionGenerator {
 
     @Override
     public void generateNullPointerException() {
@@ -13,7 +13,7 @@ public class Exceptions implements ExceptionGenerator {
 
     @Override
     public void generateClassCastException() {
-        Object x = new Integer(0);
+        Object x = 1;
         String string = (String) x;
 
     }
@@ -22,13 +22,15 @@ public class Exceptions implements ExceptionGenerator {
     public void generateNumberFormatException() {
         String string = "2O0"; //  в Числе 2O0, один знако-это буква O.
         Integer integer = Integer.parseInt(string);
+
     }
+
 
     @Override
     public void generateStackOverflowError() {
-    n++;
+        n++;
+        System.out.println(n);
         generateStackOverflowError();
-        System.out.println("Maximum calls: "+n);
     }
 
     @Override
@@ -43,52 +45,58 @@ public class Exceptions implements ExceptionGenerator {
 
     @Override
     public void generateMyException(String message) throws MyException {
+        System.out.println("Это MyException ");
+        throw new MyException(message);
 
     }
 
-    static void printStackTrace(Throwable throwable) {
+   /* public static void printStackTrace(Throwable throwable) {
         System.out.println(throwable);
         for (StackTraceElement element : throwable.getStackTrace()) {
             System.out.println(element);
         }
         System.out.println();
-    }
-static int n=0;
+    }*/
+
+    static int n=0;
     public static void main(String[] args) {
 
-
-        Exceptions exceptions = new Exceptions();
+        Except except = new Except();
         try {
-            exceptions.generateNullPointerException();
+            except.generateNullPointerException();
         } catch (Exception e) {
 
             e.printStackTrace();
         }
         try {
-            exceptions.generateClassCastException();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        try {
-            exceptions.generateNumberFormatException();
-
+            except.generateClassCastException();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         try {
-            exceptions.generateOutOfMemoryError();
+            except.generateNumberFormatException();
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*try {
+            except.generateStackOverflowError();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        try {
+            except.generateOutOfMemoryError();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            exceptions.generateStackOverflowError();
+            except.generateMyException("Всё поломалось");
+        } catch (MyException e)
+        {
+        e.printStackTrace();
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
