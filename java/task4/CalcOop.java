@@ -10,10 +10,9 @@ import java.util.*;
  * Created by anykey on 14.05.16.
  */
 class CalcOop {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, NoSuchMethodException, ClassNotFoundException, NoSuchFieldException {
         Scanner scanner;
         String commandLine;
-        Stack<Double> stack = new Stack<>();
 
       /*  BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("input.txt"))*/
 
@@ -21,10 +20,8 @@ class CalcOop {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
             scanner = new Scanner(System.in);
-           /* scanner = new Scanner(new FileInputStream("cmd.txt"));*/
+         /*   scanner = new Scanner(new FileInputStream("cmd.txt"));*/
         }
-
-        Map<String, Double> variablesMap = new HashMap<>();
         CommandFactory registry = CommandFactory.getInst();
 
         while (scanner.hasNextLine()) {
@@ -45,7 +42,7 @@ class CalcOop {
             String[] commandArgs = Arrays.copyOfRange(commandLineParts, 1, commandLineParts.length);
 
             if (command != null) {
-                command.exec(stack, variablesMap, commandArgs);
+                command.exec(commandArgs);
             } else {
                 System.out.println("Команда не найдена");
             }

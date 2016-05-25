@@ -1,6 +1,6 @@
 package task4.command;
 
-import task4.Param;
+import task4.In;
 import task4.ResType;
 
 import java.util.Map;
@@ -10,9 +10,11 @@ import java.util.Stack;
  * Created by anykey on 14.05.16.
  */
 public class Push implements Command {
-    @Param(type = ResType.STACK)
+    @In(type = ResType.STACK)
     private Stack<Double> stack;
-    public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
+    @In(type = ResType.CONTEXT)
+    private Map<String, Double> variablesMap;
+    public void exec(String[] commandArgs) {
 
         if (commandArgs.length != 1) {
             System.out.println("Для выполенния данной операции необходим 1 аргумент");

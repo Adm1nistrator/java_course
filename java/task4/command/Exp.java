@@ -1,18 +1,17 @@
 package task4.command;
 
-import task4.Param;
+import task4.In;
 import task4.ResType;
 
-import java.util.Map;
 import java.util.Stack;
 
 /**
  * Created by anykey on 21.05.16.
  */
 public class Exp implements Command {
-    @Param(type = ResType.STACK)
+    @In(type = ResType.STACK)
     private Stack<Double> stack;
-    public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
+    public void exec(String[] commandArgs) {
         if (stack.size() == 0){
             System.out.println("Невозможно выполнить команду. Стек пуст!");
         } else {

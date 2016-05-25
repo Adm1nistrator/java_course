@@ -1,19 +1,19 @@
 package task4.command;
 
-import task4.Param;
+import task4.In;
 import task4.ResType;
 
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * Created by anykey on 14.05.16.
  */
 public class Define implements Command {
-    @Param(type = ResType.STACK)
-    private Stack<Double> stack;
+    @In(type = ResType.CONTEXT)
+    private Map<String, Double> variablesMap;
+
     @Override
-    public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {
+    public void exec(String[] commandArgs) {
 
         if (commandArgs.length != 2) {
             System.out.println("Для выполенния данной операции необходимо 2 параметра");
