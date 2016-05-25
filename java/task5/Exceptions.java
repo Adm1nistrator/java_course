@@ -26,34 +26,42 @@ public class Exceptions implements ExceptionGenerator {
 
     @Override
     public void generateStackOverflowError() {
-
+    n++;
+        generateStackOverflowError();
+        System.out.println("Maximum calls: "+n);
     }
 
     @Override
     public void generateOutOfMemoryError() {
+        Long maxMemory = Runtime.getRuntime().maxMemory();
+        System.out.println(maxMemory);
+
+        int[] matrix = new int[(int) (maxMemory + 1)];
+        for(int i = 0; i < matrix.length; ++i)
+            matrix[i] = i+1;
     }
 
     @Override
     public void generateMyException(String message) throws MyException {
 
     }
-/*
 
-    public static void printStackTrace(Throwable throwable) {
+    static void printStackTrace(Throwable throwable) {
         System.out.println(throwable);
         for (StackTraceElement element : throwable.getStackTrace()) {
             System.out.println(element);
         }
         System.out.println();
     }
-*/
-
+static int n=0;
     public static void main(String[] args) {
+
 
         Exceptions exceptions = new Exceptions();
         try {
             exceptions.generateNullPointerException();
         } catch (Exception e) {
+
             e.printStackTrace();
         }
         try {
@@ -68,12 +76,7 @@ public class Exceptions implements ExceptionGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            exceptions.generateStackOverflowError();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         try {
             exceptions.generateOutOfMemoryError();
 
@@ -81,6 +84,11 @@ public class Exceptions implements ExceptionGenerator {
 
             e.printStackTrace();
         }
+        try {
+            exceptions.generateStackOverflowError();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
