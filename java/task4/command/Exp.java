@@ -9,7 +9,7 @@ import java.util.Stack;
 /**
  * Created by anykey on 21.05.16.
  */
-public class Exp {
+public class Exp implements Command {
     @Param(type = ResType.STACK)
     private Stack<Double> stack;
     public void exec(Stack<Double> stack, Map<String, Double> variablesMap, String[] commandArgs) {

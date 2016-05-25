@@ -20,8 +20,8 @@ class CalcOop {
         if (args.length > 0) {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
-            /*scanner = new Scanner(System.in);*/
-            scanner = new Scanner(new FileInputStream("cmd.txt"));
+            scanner = new Scanner(System.in);
+           /* scanner = new Scanner(new FileInputStream("cmd.txt"));*/
         }
 
         Map<String, Double> variablesMap = new HashMap<>();
