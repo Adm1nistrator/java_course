@@ -1,9 +1,9 @@
 package task5_2;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -37,19 +37,7 @@ public class Explorer {
             }
         });
 
-        PrintWriter printWriter = new PrintWriter(new File(outputFileName));
-        /*String outString;
-        outString = String.format("<html><body>" + "%n");
-        printWriter.write(outString);
-
-        for (File file : listFileNames) {
-            //   outString = String.format("<p>" + file.getName() + "---------" + (file.isFile() ? "2.2f"+getSizeFile(file) : "") + "---------" + new Date(file.lastModified()) + "</p>" + "%n");
-            outString = String.format("<p>" + "%20s%20s%20s" + "</p>" + "%n", file.getName(), file.isFile() ? getSizeFile(file) : "", " " + new Date(file.lastModified()));
-            printWriter.write(outString);
-        }
-        outString = String.format("</body></html>");
-        printWriter.write(outString);
-        printWriter.close();*/
+        //сервер
         int port;
         port = 8888;
         ServerSocket serverSocket = new ServerSocket(port);
@@ -65,37 +53,26 @@ public class Explorer {
                     break;
                 }
             }
-
-            // System.out.println(sb);
             OutputStream outputStream = accept.getOutputStream();
-            //outputStream.write("hello".getBytes());
             String outString;
-            // outputStream.write(("Mime Type of " + f.getName() + " is " +
-
-            //        new MimetypesFileTypeMap().getContentType(f)).getBytes());
-
-            //  outputStream.write("HTTP/1.0 200 OK\r\n".getBytes());
-//минимально необходимые заголовки, тип и длина
-
-            // outputStream.write("Content-Type: text/html\r\n".getBytes());
-
-//пустая строка отделяет заголовки от тела
-
-            //   outputStream.write("\r\n".getBytes());
             outString = ("<html><body>\n");
+            outputStream.write(outString.getBytes());
+            outString = ("<a href='" +listFileNames.get(1).getParent()+ "'> ../</a>");
             outputStream.write(outString.getBytes());
             outString = ("<table width='100%'>\n");
             outputStream.write(outString.getBytes());
-
-//тело
-
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-YYYY HH:mm");
+            //тело
 
             for (File file : listFileNames) {
-                //  outString = String.format("<p>" + "%20s%20s%20s" + "</p>" + "%n", file.getName(), file.isFile() ? getSizeFile(file) : "", " " + new Date(file.lastModified()));
-                outString = String.format("%20s%20s%20s" + "%n",
-                        "<tr><td><a href='" + file.getName() + "'>" + file.getName() + ((file.isDirectory() ? "/": "")) + "</a></td>",
-                        "<td>" + (file.isFile() ? getSizeFile(file) : "") + "</td>",
-                        "<td>" + new Date(file.lastModified()) + "</td></tr>");
+                String fileLink= ("<a href='" + file.getName() + "'>" + file.getName() + ((file.isDirectory() ? "/" : "")) + "</a>");
+                String fileLastMofified = (dateFormat.format(file.lastModified()));
+                String fileSize=(file.isFile() ? getSizeFile(file) : "-");
+                outString = String.format("%s%s%s" + "%n",
+                        "<tr><td>"+fileLink+"</td>",
+                        "<td>" + fileLastMofified + "</td>",
+                        "<td>" + fileSize + "</td></tr>");
+
                 outputStream.write(outString.getBytes());
             }
 
@@ -130,7 +107,7 @@ public class Explorer {
         Mb = Kb / 1024;
         Gb = Mb / 1024;
         if (bytes >= 0 & bytes < 1024) {
-            return String.format("%1$4.2f" + " b", bytes);
+            return String.format("%1$4.2f" + " B", bytes);
         } else if ((Kb >= 1) & (Kb < 1024)) {
             return String.format("%1$4.2f" + " Kb", Kb);
         } else if ((Mb >= 1) & (Mb < 1024)) {
