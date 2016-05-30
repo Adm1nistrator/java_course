@@ -66,11 +66,11 @@ public class Explorer {
 
             for (File file : listFileNames) {
                 String fileLink= ("<a href='" + file.getName() + "'>" + file.getName() + ((file.isDirectory() ? "/" : "")) + "</a>");
-                String fileLastMofified = (dateFormat.format(file.lastModified()));
+                String fileLastModified = (dateFormat.format(file.lastModified()));
                 String fileSize=(file.isFile() ? getSizeFile(file) : "-");
                 outString = String.format("%s%s%s" + "%n",
                         "<tr><td>"+fileLink+"</td>",
-                        "<td>" + fileLastMofified + "</td>",
+                        "<td>" + fileLastModified + "</td>",
                         "<td>" + fileSize + "</td></tr>");
 
                 outputStream.write(outString.getBytes());
