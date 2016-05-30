@@ -19,8 +19,8 @@ class CalcOop {
         if (args.length > 0) {
             scanner = new Scanner(new FileInputStream(args[0]));
         } else {
-            scanner = new Scanner(System.in);
-         /*   scanner = new Scanner(new FileInputStream("cmd.txt"));*/
+         /*   scanner = new Scanner(System.in);*/
+            scanner = new Scanner(new FileInputStream("cmd.txt"));
         }
         CommandFactory registry = CommandFactory.getInst();
 
@@ -42,6 +42,7 @@ class CalcOop {
             String[] commandArgs = Arrays.copyOfRange(commandLineParts, 1, commandLineParts.length);
 
             if (command != null) {
+                //
                 command.exec(commandArgs);
             } else {
                 System.out.println("Команда не найдена");

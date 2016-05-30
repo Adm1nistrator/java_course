@@ -15,7 +15,7 @@ class CommandFactory {
     private final static CommandFactory inst = new CommandFactory();
     private Stack<Double> stack = new Stack<>();
 
-    Map<String, Double> variablesMap = new HashMap<>();
+   private Map<String, Double> variablesMap = new HashMap<>();
 
     private CommandFactory() {
 
@@ -26,7 +26,6 @@ class CommandFactory {
         } catch (IOException e) {
             System.out.println("Чтение файла commands.properties завершилось с ошибкой!");
         }
-
 
         /*    Class myClass = Class.forName("task4.command.Add");
         System.out.println(myClass);
