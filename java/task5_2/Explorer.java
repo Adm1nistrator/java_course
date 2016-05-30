@@ -14,7 +14,7 @@ public class Explorer {
     private static ArrayList<File> listFileNames = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
-        String catalogName = "//home//anykey//IdeaProjects//java_course//";
+        String catalogName = "//";
         getListFiles(catalogName);
         String outputFileName = "index.html";
 
@@ -114,7 +114,7 @@ public class Explorer {
             return String.format("%1$4.2f" + " Mb", Mb);
         } else if ((Gb >= 1) & (Gb < 1024)) {
             return String.format("%1$4.2f" + " Gb", Gb);
-        } else return String.format("%1$" + " b", bytes);
+        } else return String.format("%1$" + " B", bytes);
     }
 
 }
