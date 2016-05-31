@@ -12,7 +12,7 @@ public class Explorer {
     public static void main(String[] args) throws IOException {
         File f = new File("icon.png");
         //   String catalogName = "//home//anykey//temp/";
-        String catalogName = "//home//anykey//IdeaProjects//java_course//";
+        String catalogName = "d:\\";
         //сервер
         int port;
         port = 8888;
@@ -35,7 +35,7 @@ public class Explorer {
             //получаем команду и ее аргументы
             String data = sb.toString();
             String arg[] = data.split(" ");
-            String cmd = arg[1].trim().toUpperCase();
+            String cmd = arg[0].trim().toUpperCase();
             //пишем статус ответа
             OutputStream outputStream = accept.getOutputStream();
             outputStream.write("HTTP/1.0 200 OK\r\n".getBytes());
@@ -44,6 +44,7 @@ public class Explorer {
             Integer length = HtmlCreator.generatHtml(catalogName).length();
             outputStream.write(("Content-Length: " + length + "\r\n").getBytes());
             //пустая строка отделяет заголовки
+            outputStream.write("\r\n".getBytes());
             outputStream.write("\r\n".getBytes());
             System.out.println(cmd);
             outputStream.write(HtmlCreator.generatHtml(catalogName).getBytes());
