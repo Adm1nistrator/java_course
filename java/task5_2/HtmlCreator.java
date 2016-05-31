@@ -11,11 +11,14 @@ import java.util.Comparator;
 /**
  * Created by Adm1n on 30.05.2016.
  */
-public class HtmlCreator {
-    private static ArrayList<File> fileList = new ArrayList<>();
+class HtmlCreator {
+    private static ArrayList<File> fileList;
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-YYYY HH:mm");
 
+
     static String generatHtml(@NotNull String catalogName) {
+        fileList = new ArrayList<>();
+
         if (catalogName==null)
         {throw new IllegalArgumentException("Имя каталога не заданно");}
 
@@ -23,7 +26,7 @@ public class HtmlCreator {
 
         Collections.sort(fileList, new FileComparator());
 
-        StringBuilder out = new StringBuilder();
+        StringBuilder out = new StringBuilder("");
         out.append("<html><body>");
         out.append("<a href='").append(fileList.get(1).getParent()).append("'> ../</a>");
         out.append("<table width='100%'>");
@@ -68,7 +71,7 @@ public class HtmlCreator {
             return String.format("%1$4.2f" + " Mb", Mb);
         } else if ((Gb >= 1) & (Gb < 1024)) {
             return String.format("%1$4.2f" + " Gb", Gb);
-        } else return String.format("%1$" + " B", bytes);
+        } else return bytes+ " B";
     }
 
     private static class FileComparator implements Comparator<File> {
@@ -87,3 +90,4 @@ public class HtmlCreator {
         }
     }
 }
+
