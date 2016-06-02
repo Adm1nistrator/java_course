@@ -21,54 +21,78 @@ class HtmlCreator {
             throw new IllegalArgumentException("Имя каталога не заданно");
         } else {
             File current = new File(catalogName);
-            if (current.isDirectory()) {
-                return renderDirectoryHtml(getFileList(current));
+
+            if (current.exists() & current.isDirectory()) {
+                System.out.println("Текйщий каталог :" + current);
+                return renderDirectoryHtml(getFileList(current), catalogName);
+            } else if (current.exists() & current.isFile()) {
+                System.out.println("Текйщий фаил :" + current.length());
+                return renderFileHtml(current);
+            } else {
+
+                return pageNotFound();
             }
-            return renderFileHtml(current);
         }
 
     }
 
-  /*  private static boolean DirOrFile(String catalogName) {
-        File current = new File(catalogName);
-        if (current.isDirectory()) {
-            return true;
-        } else return false;
-
-    }*/
 
     static String head(String catalogName) {
         StringBuilder out = new StringBuilder();
         Integer length = HtmlCreator.generatHtml(catalogName).length();
-        out.append("HTTP/1.0 200 OK\r\n");
+        //  out.append("HTTP/1.0 200 OK\r\n");
 
-        out.append("Content-Length: ").append(length).append("\r\n");
+        //  out.append("Content-Length: ").append(length).append("\r\n");
 
         File current = new File(catalogName);
         if (current.isDirectory()) {
+            out.append("HTTP/1.0 200 OK\r\n");
             out.append("Content-Type: text/html; charset=utf-8\r\n");
+            out.append("Content-Length: ").append(length).append("\r\n");
             out.append("\r\n");
             out.append("\r\n");
             return out.toString();
-        }else {
-            out.append("Content-Type:  application/octet-stream\r\n");
-            out.append("\r\n");
-            out.append("\r\n");
-            return out.toString();
+        } else {
+            if (current.exists()) {
+                out.append("HTTP/1.0 200 OK\r\n");
+                //out.append("Content-Type:  application/octet-stream\r\n");
+                out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
+                out.append("Content-Length: ").append(length).append("\r\n");
+                out.append("\r\n");
+                out.append("\r\n");
+                return out.toString();
+            } else {
+
+                out.append("HTTP/1.0 404 \r\n");
+                out.append("Content-Type: text/html; charset=utf-8\r\n");
+                out.append("Content-Length: ").append(length).append("\r\n");
+                return out.toString();
+            }
+
 
         }
 
     }
 
-    private static String renderDirectoryHtml(List<File> fileList) {
+    private static String toUpFolder(String catalogName) {
+        StringBuilder out = new StringBuilder("");
+        File current = new File(catalogName);
+        String parent = current.getParent();
+        out.append("<a href='").append(parent).append("'> ../</a>");
+        System.out.println("Путь к родительской папке: " + parent);
+
+        return out.toString();
+    }
+
+    private static String renderDirectoryHtml(List<File> fileList, String catalogName) {
 
         Collections.sort(fileList, new FileComparator());
 
         StringBuilder out = new StringBuilder("");
+        out.append("<!DOCTYPE html>");
         out.append("<html><body>");
-        String parent = fileList.get(0).getParentFile().getParent();
-        out.append("<a href='").append(parent).append("'> ../</a>");
-        out.append("<table width='100%'>");
+        out.append(toUpFolder(catalogName));
+        out.append("<table width='60%'>");
 
         for (File file : fileList) {
             String fileLink = "<a href='" + file.getAbsolutePath() + "'>" + file.getName() + (file.isDirectory() ? "/" : "") + "</a>";
@@ -85,13 +109,23 @@ class HtmlCreator {
     }
 
     private static String renderFileHtml(File currentFile) {
-        StringBuilder out = new StringBuilder("");
-        out.append("Mime Type of ").append(currentFile.getName()).append(" is ");
+        StringBuilder out = new StringBuilder();
+
         out.append(new MimetypesFileTypeMap().getContentType(currentFile));
         if (currentFile.isFile()) {
             return out.toString();
         } else return "";
 
+    }
+
+    private static String pageNotFound() {
+        StringBuilder out = new StringBuilder();
+
+        out.append("<!DOCTYPE html>");
+        out.append("<html><body>");
+        out.append("такой страницы нет");
+        out.append("</html></body>");
+        return out.toString();
     }
 
     private static List<File> getFileList(File current) {

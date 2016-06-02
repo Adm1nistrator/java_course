@@ -25,6 +25,7 @@ public class ClientConnection implements Runnable {
             outputStream = clientSocket.getOutputStream();
             //минимально необходимые заголовки и длина
             outputStream.write(HtmlCreator.head(catalogName).getBytes());
+            outputStream.flush();
             //пустая строка отделяет заголовки
             outputStream.write(HtmlCreator.generatHtml(catalogName).getBytes());
             outputStream.flush();

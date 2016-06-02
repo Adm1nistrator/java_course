@@ -3,6 +3,7 @@ package task5_2;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.util.UUID;
 
 /**
@@ -32,8 +33,11 @@ public class Explorer {
             String cmd = arg[0].trim().toUpperCase();
             String url = arg[1];
             catalogName = createPath(url, catalogName);
+
             System.out.println("Запрошен путь:" + catalogName);
-            new Thread(new ClientConnection(clientSocket, catalogName), "Клиентский поток: " + UUID.randomUUID()).start();
+            int i = 0;
+            new Thread(new ClientConnection(clientSocket, catalogName), "Клиентский поток: " + i).start();
+            i++;
         }
     }
 
@@ -55,14 +59,15 @@ public class Explorer {
 
     }
 
-    static String createPath(String url, String catalogName) {
+    static String createPath(String url, String catalogName) throws UnsupportedEncodingException {
         String path = url.replace("/", File.separator).replace("%20", " ");
+        path = URLDecoder.decode(path, "utf-8");
         if (url.equals("/")) {
             return catalogName;
         } else {
-
+            return path;
         }
-        return path;
+
     }
 
 }
