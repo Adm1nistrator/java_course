@@ -15,8 +15,7 @@ public class Explorer {
         String catalogName = "/home/anykey/IdeaProjects/java_course";
         //   String catalogName = "d:\\";
         //сервер
-        int port;
-        port = 8888;
+        int port = 8888;
         ServerSocket serverSocket = new ServerSocket(port);
         while (true) {
             Socket clientSocket = serverSocket.accept();

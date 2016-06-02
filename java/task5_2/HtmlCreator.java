@@ -29,20 +29,34 @@ class HtmlCreator {
 
     }
 
-    private static boolean DirOrFile(String catalogName) {
+  /*  private static boolean DirOrFile(String catalogName) {
         File current = new File(catalogName);
         if (current.isDirectory()) {
             return true;
         } else return false;
 
-    }
+    }*/
 
     static String head(String catalogName) {
+        StringBuilder out = new StringBuilder();
+        Integer length = HtmlCreator.generatHtml(catalogName).length();
+        out.append("HTTP/1.0 200 OK\r\n");
+
+        out.append("Content-Length: ").append(length).append("\r\n");
+
         File current = new File(catalogName);
         if (current.isDirectory()) {
-            return "Content-Type: text/html; charset=utf-8\r\n";
+            out.append("Content-Type: text/html; charset=utf-8\r\n");
+            out.append("\r\n");
+            out.append("\r\n");
+            return out.toString();
+        }else {
+            out.append("Content-Type:  application/octet-stream\r\n");
+            out.append("\r\n");
+            out.append("\r\n");
+            return out.toString();
+
         }
-        return "Content-Type:  application/octet-stream\r\n";
 
     }
 
