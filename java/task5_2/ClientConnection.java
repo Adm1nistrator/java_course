@@ -23,9 +23,9 @@ public class ClientConnection implements Runnable {
         OutputStream outputStream = null;
         try {
             outputStream = clientSocket.getOutputStream();
-            outputStream.write("HTTP/1.0 200 OK\r\n".getBytes());
             //минимально необходимые заголовки и длина
-            outputStream.write("Content-Type: text/html;  charset=utf-8\r\n".getBytes());
+            outputStream.write("HTTP/1.0 200 OK\r\n".getBytes());
+            outputStream.write(HtmlCreator.head(catalogName).getBytes());
             Integer length = HtmlCreator.generatHtml(catalogName).length();
             outputStream.write(("Content-Length: " + length + "\r\n").getBytes());
             //пустая строка отделяет заголовки
