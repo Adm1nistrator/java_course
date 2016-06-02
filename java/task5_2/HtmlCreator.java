@@ -2,6 +2,7 @@ package task5_2;
 
 import com.sun.istack.internal.NotNull;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,22 +19,45 @@ class HtmlCreator {
     static String generatHtml(@NotNull String catalogName) {
         if (catalogName == null) {
             throw new IllegalArgumentException("Имя каталога не заданно");
+        } else {
+            File current = new File(catalogName);
+            if (current.isDirectory()) {
+                return renderDirectoryHtml(getFileList(current));
+            }
+            return renderFileHtml(current);
         }
-     return renderDirectoryHtml(catalogName);
+
     }
 
-    private static  String renderDirectoryHtml(@NotNull String catalogName){
+    private static boolean DirOrFile(String catalogName) {
+        File current = new File(catalogName);
+        if (current.isDirectory()) {
+            return true;
+        } else return false;
 
-        List<File> fileList = getFileList(catalogName);
+    }
+
+    static String head(String catalogName) {
+        File current = new File(catalogName);
+        if (current.isDirectory()) {
+            return "Content-Type: text/html; charset=utf-8\r\n";
+        }
+        return "Content-Type:  application/octet-stream\r\n";
+
+    }
+
+    private static String renderDirectoryHtml(List<File> fileList) {
+
         Collections.sort(fileList, new FileComparator());
 
         StringBuilder out = new StringBuilder("");
         out.append("<html><body>");
-        out.append("<a href='").append(fileList.get(0).getAbsolutePath()).append("'> ../</a>");
+        String parent = fileList.get(0).getParentFile().getParent();
+        out.append("<a href='").append(parent).append("'> ../</a>");
         out.append("<table width='100%'>");
 
         for (File file : fileList) {
-            String fileLink = "<a href='" + file.getName() + "'>" + file.getName() + (file.isDirectory() ? "/" : "") + "</a>";
+            String fileLink = "<a href='" + file.getAbsolutePath() + "'>" + file.getName() + (file.isDirectory() ? "/" : "") + "</a>";
             String fileLastModified = DATE_FORMAT.format(file.lastModified());
             String fileSize = file.isFile() ? getSizeFile(file) : "-";
             out.append("<tr><td>").append(fileLink).append("</td>");
@@ -46,15 +70,20 @@ class HtmlCreator {
         return out.toString();
     }
 
-    /*private static String renderFileHtml(){
+    private static String renderFileHtml(File currentFile) {
         StringBuilder out = new StringBuilder("");
-        out.append("Mime Type of " + f.getName() + " is " + new MimetypesFileTypeMap().getContentType(f));*/
+        out.append("Mime Type of ").append(currentFile.getName()).append(" is ");
+        out.append(new MimetypesFileTypeMap().getContentType(currentFile));
+        if (currentFile.isFile()) {
+            return out.toString();
+        } else return "";
 
-    private static List<File> getFileList(String catalogName) {
-        File currentDirectory = new File(catalogName);
+    }
+
+    private static List<File> getFileList(File current) {
         List<File> result = new ArrayList<>();
-        if (currentDirectory.exists() & currentDirectory.isDirectory()) {
-            File[] files = currentDirectory.listFiles();
+        if (current.exists() & current.isDirectory()) {
+            File[] files = current.listFiles();
             if (files == null) {
                 return result;
             } else {

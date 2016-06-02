@@ -12,8 +12,8 @@ public class Explorer {
 
     public static void main(String[] args) throws IOException {
         File f = new File("icon.png");
-        //   String catalogName = "//home//anykey//temp/";
-        String catalogName = "d:\\";
+        String catalogName = "/home/anykey/IdeaProjects/java_course";
+        //   String catalogName = "d:\\";
         //сервер
         int port;
         port = 8888;
@@ -34,8 +34,7 @@ public class Explorer {
             String url = arg[1];
             catalogName = createPath(url, catalogName);
             System.out.println("Запрошен путь:" + catalogName);
-            new Thread(new ClientConnection(clientSocket, catalogName), "Клиентский поток"+ UUID.randomUUID()).start();
-
+            new Thread(new ClientConnection(clientSocket, catalogName), "Клиентский поток: " + UUID.randomUUID()).start();
         }
     }
 
@@ -58,10 +57,13 @@ public class Explorer {
     }
 
     static String createPath(String url, String catalogName) {
+        String path = url.replace("/", File.separator).replace("%20", " ");
         if (url.equals("/")) {
             return catalogName;
+        } else {
+
         }
-        return catalogName + url.replace("/", File.separator).replace("%20", " ");
+        return path;
     }
 
 }
