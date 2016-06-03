@@ -3,7 +3,11 @@ package task5_2;
 import com.sun.istack.internal.NotNull;
 
 import javax.activation.MimetypesFileTypeMap;
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,33 +43,40 @@ class HtmlCreator {
 
     static String head(String catalogName) {
         StringBuilder out = new StringBuilder();
-        Integer length = HtmlCreator.generatHtml(catalogName).length();
+        // Integer length = HtmlCreator.generatHtml(catalogName).length()\
+        byte[] b = HtmlCreator.generatHtml(catalogName).getBytes(StandardCharsets.UTF_8);
+        Integer length = b.length;
         //  out.append("HTTP/1.0 200 OK\r\n");
 
         //  out.append("Content-Length: ").append(length).append("\r\n");
 
         File current = new File(catalogName);
         if (current.isDirectory()) {
-            out.append("HTTP/1.0 200 OK\r\n");
+            out.append("HTTP/1.1 200 OK\r\n");
+            out.append("Server: LocalServer\r\n");
             out.append("Content-Type: text/html; charset=utf-8\r\n");
             out.append("Content-Length: ").append(length).append("\r\n");
             out.append("\r\n");
-            out.append("\r\n");
+            //     out.append("\r\n");
             return out.toString();
         } else {
             if (current.exists()) {
-                out.append("HTTP/1.0 200 OK\r\n");
+                out.append("HTTP/1.1 200 OK\r\n");
                 //out.append("Content-Type:  application/octet-stream\r\n");
-                out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
+                out.append("Server: LocalServer\r\n");
+                out.append("Content-Type:  application/octet-stream\r\n");
+               // out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
                 out.append("Content-Length: ").append(length).append("\r\n");
                 out.append("\r\n");
-                out.append("\r\n");
+                //  out.append("\r\n");
                 return out.toString();
             } else {
 
-                out.append("HTTP/1.0 404 \r\n");
+                out.append("HTTP/1.1 404\r\n");
+                out.append("Server: LocalServer\r\n");
                 out.append("Content-Type: text/html; charset=utf-8\r\n");
                 out.append("Content-Length: ").append(length).append("\r\n");
+                out.append("\r\n");
                 return out.toString();
             }
 
@@ -84,7 +95,7 @@ class HtmlCreator {
         return out.toString();
     }
 
-    private static String renderDirectoryHtml(List<File> fileList, String catalogName) {
+    static String renderDirectoryHtml(List<File> fileList, String catalogName) {
 
         Collections.sort(fileList, new FileComparator());
 
@@ -108,7 +119,7 @@ class HtmlCreator {
         return out.toString();
     }
 
-    private static String renderFileHtml(File currentFile) {
+    static String renderFileHtml(File currentFile) {
         StringBuilder out = new StringBuilder();
 
         out.append(new MimetypesFileTypeMap().getContentType(currentFile));
@@ -118,7 +129,15 @@ class HtmlCreator {
 
     }
 
-    private static String pageNotFound() {
+    static byte[] getFile(String catalogName) throws IOException {
+        Path path = Paths.get(catalogName);
+        byte data[] = Files.readAllBytes(path);
+
+        return data;
+
+    }
+
+    static String pageNotFound() {
         StringBuilder out = new StringBuilder();
 
         out.append("<!DOCTYPE html>");

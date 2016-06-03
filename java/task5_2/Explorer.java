@@ -60,14 +60,14 @@ public class Explorer {
     }
 
     static String createPath(String url, String catalogName) throws UnsupportedEncodingException {
+        File currentFile = new File(catalogName);
         String path = url.replace("/", File.separator).replace("%20", " ");
         path = URLDecoder.decode(path, "utf-8");
-        if (url.equals("/")) {
-            return catalogName;
-        } else {
-            return path;
-        }
-
+            if (url.equals("/")) {
+                return catalogName;
+            } else {
+                return path;
+            }
     }
 
 }

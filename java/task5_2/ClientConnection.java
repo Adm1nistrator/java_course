@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import static task5_2.HtmlCreator.getFile;
+
 /**
  * Created by Adm1n on 01.06.2016.
  */
@@ -25,9 +27,11 @@ public class ClientConnection implements Runnable {
             outputStream = clientSocket.getOutputStream();
             //минимально необходимые заголовки и длина
             outputStream.write(HtmlCreator.head(catalogName).getBytes());
+
             outputStream.flush();
-            //пустая строка отделяет заголовки
             outputStream.write(HtmlCreator.generatHtml(catalogName).getBytes());
+
+            outputStream.write(getFile(catalogName));
             outputStream.flush();
 
         } catch (IOException e) {
