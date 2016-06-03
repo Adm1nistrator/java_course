@@ -1,10 +1,11 @@
 package task5_2;
 
+import com.sun.istack.internal.NotNull;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import static task5_2.HtmlCreator.getFile;
 
 /**
  * Created by Adm1n on 01.06.2016.
@@ -12,10 +13,12 @@ import static task5_2.HtmlCreator.getFile;
 public class ClientConnection implements Runnable {
     Socket clientSocket;
     String catalogName;
+    String rootPath;
 
-    ClientConnection(Socket clientSocket, String catalogName) {
+    ClientConnection(Socket clientSocket, String catalogName, String rootPath) {
         this.clientSocket = clientSocket;
         this.catalogName = catalogName;
+        this.rootPath = rootPath;
     }
 
     @Override
@@ -25,14 +28,7 @@ public class ClientConnection implements Runnable {
         OutputStream outputStream = null;
         try {
             outputStream = clientSocket.getOutputStream();
-            //минимально необходимые заголовки и длина
-            outputStream.write(HtmlCreator.head(catalogName).getBytes());
-
-            outputStream.flush();
-            outputStream.write(HtmlCreator.generatHtml(catalogName).getBytes());
-
-            outputStream.write(getFile(catalogName));
-            outputStream.flush();
+            writeResponse(catalogName,rootPath, outputStream);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,6 +39,35 @@ public class ClientConnection implements Runnable {
                 e.printStackTrace();
             }
         }
+
+
+    }
+
+    private static void writeResponse(@NotNull String catalogName, String rootPath, OutputStream outputStream) throws IOException {
+        if (catalogName == null) {
+            throw new IllegalArgumentException("Имя каталога не заданно");
+        }
+        File current = new File(catalogName);
+
+        if (!current.exists()) {
+            String pageNotFound = HtmlCreator.pageNotFound();
+            outputStream.write(HtmlCreator.pageNotFoundHead(HtmlCreator.getBodyLength(pageNotFound)).getBytes());
+            outputStream.write(pageNotFound.getBytes());
+            outputStream.flush();
+            return;
+        }
+
+        if (current.isDirectory()) {
+            System.out.println("Текйщий каталог :" + current);
+            String directoryHtml = HtmlCreator.renderDirectoryHtml(current,rootPath);
+            outputStream.write(HtmlCreator.directoryHead(HtmlCreator.getBodyLength(directoryHtml)).getBytes());
+            outputStream.write(directoryHtml.getBytes());
+            outputStream.flush();
+            return;
+        }
+            System.out.println("Текйщий фаил :" + current.length());
+
+
 
 
     }

@@ -1,18 +1,11 @@
 package task5_2;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.activation.MimetypesFileTypeMap;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Adm1n on 30.05.2016.
@@ -20,49 +13,11 @@ import java.util.List;
 class HtmlCreator {
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-YYYY HH:mm");
 
-    static String generatHtml(@NotNull String catalogName) {
-        if (catalogName == null) {
-            throw new IllegalArgumentException("Имя каталога не заданно");
-        } else {
-            File current = new File(catalogName);
 
-            if (current.exists() & current.isDirectory()) {
-                System.out.println("Текйщий каталог :" + current);
-                return renderDirectoryHtml(getFileList(current), catalogName);
-            } else if (current.exists() & current.isFile()) {
-                System.out.println("Текйщий фаил :" + current.length());
-                return renderFileHtml(current);
-            } else {
+/*
 
-                return pageNotFound();
-            }
-        }
-
-    }
-
-
-    static String head(String catalogName) {
-        StringBuilder out = new StringBuilder();
-        // Integer length = HtmlCreator.generatHtml(catalogName).length()\
-        byte[] b = HtmlCreator.generatHtml(catalogName).getBytes(StandardCharsets.UTF_8);
-        Integer length = b.length;
-        //  out.append("HTTP/1.0 200 OK\r\n");
-
-        //  out.append("Content-Length: ").append(length).append("\r\n");
-
-        File current = new File(catalogName);
-        if (current.isDirectory()) {
-            out.append("HTTP/1.1 200 OK\r\n");
-            out.append("Server: LocalServer\r\n");
-            out.append("Content-Type: text/html; charset=utf-8\r\n");
-            out.append("Content-Length: ").append(length).append("\r\n");
-            out.append("\r\n");
-            //     out.append("\r\n");
-            return out.toString();
-        } else {
-            if (current.exists()) {
+            if (current.exists() & current.isFile()) {
                 out.append("HTTP/1.1 200 OK\r\n");
-                //out.append("Content-Type:  application/octet-stream\r\n");
                 out.append("Server: LocalServer\r\n");
                 out.append("Content-Type:  application/octet-stream\r\n");
                // out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
@@ -70,43 +25,81 @@ class HtmlCreator {
                 out.append("\r\n");
                 //  out.append("\r\n");
                 return out.toString();
-            } else {
+            } */
 
-                out.append("HTTP/1.1 404\r\n");
-                out.append("Server: LocalServer\r\n");
-                out.append("Content-Type: text/html; charset=utf-8\r\n");
-                out.append("Content-Length: ").append(length).append("\r\n");
-                out.append("\r\n");
-                return out.toString();
-            }
-
-
-        }
-
+    static String pageNotFoundHead(Integer bodyLength) {
+        StringBuilder out = new StringBuilder();
+        out.append("HTTP/1.1 404\r\n");
+        out.append("Server: LocalServer\r\n");
+        out.append("Content-Type: text/html; charset=utf-8\r\n");
+        out.append("Content-Length: ").append(bodyLength).append("\r\n");
+        out.append("\r\n");
+        return out.toString();
     }
 
-    private static String toUpFolder(String catalogName) {
+    static String directoryHead(Integer bodyLength) {
+        StringBuilder out = new StringBuilder();
+        out.append("HTTP/1.1 200 OK\r\n");
+        out.append("Server: LocalServer\r\n");
+        out.append("Content-Type: text/html; charset=utf-8\r\n");
+        out.append("Content-Length: ").append(bodyLength).append("\r\n");
+        out.append("\r\n");
+        return out.toString();
+    }
+
+    static Integer getBodyLength(String body) {
+        byte[] b = body.getBytes(StandardCharsets.UTF_8);
+        return b.length;
+    }
+
+
+    private static String toUpFolder(File currentFile, String rootPath) throws IOException {
         StringBuilder out = new StringBuilder("");
-        File current = new File(catalogName);
-        String parent = current.getParent();
-        out.append("<a href='").append(parent).append("'> ../</a>");
-        System.out.println("Путь к родительской папке: " + parent);
+        if (currentFile.getParentFile()==null)
+        {
+            return "";
+        }
+        String parentUrl = extractUrl(currentFile.getParentFile(), rootPath);
+        out.append("<a href='").append(parentUrl).append("'> ../</a>");
+        System.out.println("Путь к родительской папке: " + parentUrl);
 
         return out.toString();
     }
 
-    static String renderDirectoryHtml(List<File> fileList, String catalogName) {
+    private static String extractUrl(File currentFile, String rootPath) throws IOException {
+        String fullPath = currentFile.getAbsolutePath();
+        if (!fullPath.startsWith(rootPath)) {
+            throw new IllegalStateException("Не допустимыый путь : " + fullPath);
+        } else if (fullPath.equals(rootPath))
+        {
+            return "/";
+        } else {
+            Integer end = fullPath.length();
+            System.out.println("URL : " + fullPath.substring(rootPath.length(), end));
+            return fullPath.substring(rootPath.length(), end);
+        }
+    }
+
+    static String renderDirectoryHtml(File currentFile, String rootPath) throws IOException {
+        File[] files = currentFile.listFiles();
+        List<File> fileList;
+
+        if (files == null) {
+            fileList = new ArrayList<>();
+        } else {
+            fileList = Arrays.asList(files);
+        }
 
         Collections.sort(fileList, new FileComparator());
 
         StringBuilder out = new StringBuilder("");
         out.append("<!DOCTYPE html>");
         out.append("<html><body>");
-        out.append(toUpFolder(catalogName));
+        out.append(toUpFolder(currentFile, rootPath));
         out.append("<table width='60%'>");
 
         for (File file : fileList) {
-            String fileLink = "<a href='" + file.getAbsolutePath() + "'>" + file.getName() + (file.isDirectory() ? "/" : "") + "</a>";
+            String fileLink = "<a href='" + extractUrl(file, rootPath) + "'>" + file.getName() + (file.isDirectory() ? "/" : "") + "</a>";
             String fileLastModified = DATE_FORMAT.format(file.lastModified());
             String fileSize = file.isFile() ? getSizeFile(file) : "-";
             out.append("<tr><td>").append(fileLink).append("</td>");
@@ -129,13 +122,13 @@ class HtmlCreator {
 
     }
 
-    static byte[] getFile(String catalogName) throws IOException {
+/*    static byte[] getFile(String catalogName) throws IOException {
         Path path = Paths.get(catalogName);
         byte data[] = Files.readAllBytes(path);
 
         return data;
 
-    }
+    }*/
 
     static String pageNotFound() {
         StringBuilder out = new StringBuilder();
