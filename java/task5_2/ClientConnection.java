@@ -28,7 +28,7 @@ public class ClientConnection implements Runnable {
         OutputStream outputStream = null;
         try {
             outputStream = clientSocket.getOutputStream();
-            writeResponse(catalogName,rootPath, outputStream);
+            writeResponse(catalogName, rootPath, outputStream);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,15 +59,17 @@ public class ClientConnection implements Runnable {
 
         if (current.isDirectory()) {
             System.out.println("Текйщий каталог :" + current);
-            String directoryHtml = HtmlCreator.renderDirectoryHtml(current,rootPath);
+            String directoryHtml = HtmlCreator.renderDirectoryHtml(current, rootPath);
             outputStream.write(HtmlCreator.directoryHead(HtmlCreator.getBodyLength(directoryHtml)).getBytes());
             outputStream.write(directoryHtml.getBytes());
             outputStream.flush();
             return;
         }
-            System.out.println("Текйщий фаил :" + current.length());
+        System.out.println("Текйщий фаил :" + current.length());
+        outputStream.write(HtmlCreator.fileHead(HtmlCreator.getBodyLength(HtmlCreator.getFile(catalogName))).getBytes());
+        outputStream.write(HtmlCreator.getFile(catalogName));
 
-
+        return;
 
 
     }

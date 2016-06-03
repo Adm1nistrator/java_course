@@ -4,6 +4,9 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -13,20 +16,6 @@ import java.util.*;
 class HtmlCreator {
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-YYYY HH:mm");
 
-
-/*
-
-            if (current.exists() & current.isFile()) {
-                out.append("HTTP/1.1 200 OK\r\n");
-                out.append("Server: LocalServer\r\n");
-                out.append("Content-Type:  application/octet-stream\r\n");
-               // out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
-                out.append("Content-Length: ").append(length).append("\r\n");
-                out.append("\r\n");
-                //  out.append("\r\n");
-                return out.toString();
-            } */
-
     static String pageNotFoundHead(Integer bodyLength) {
         StringBuilder out = new StringBuilder();
         out.append("HTTP/1.1 404\r\n");
@@ -34,6 +23,19 @@ class HtmlCreator {
         out.append("Content-Type: text/html; charset=utf-8\r\n");
         out.append("Content-Length: ").append(bodyLength).append("\r\n");
         out.append("\r\n");
+        return out.toString();
+
+    }
+
+    static String fileHead(Integer bodyLength) {
+        StringBuilder out = new StringBuilder();
+        out.append("HTTP/1.1 200 OK\r\n");
+        out.append("Server: LocalServer\r\n");
+        out.append("Content-Type:  application/octet-stream\r\n");
+        // out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
+        out.append("Content-Length: ").append(bodyLength).append("\r\n");
+        out.append("\r\n");
+        //  out.append("\r\n");
         return out.toString();
     }
 
@@ -52,6 +54,9 @@ class HtmlCreator {
         return b.length;
     }
 
+    static Integer getBodyLength(byte[] b) {
+        return b.length;
+    }
 
     private static String toUpFolder(File currentFile, String rootPath) throws IOException {
         StringBuilder out = new StringBuilder("");
@@ -124,13 +129,13 @@ class HtmlCreator {
 
     }
 
-/*    static byte[] getFile(String catalogName) throws IOException {
+   static byte[] getFile(String catalogName) throws IOException {
         Path path = Paths.get(catalogName);
         byte data[] = Files.readAllBytes(path);
 
         return data;
 
-    }*/
+    }
 
     static String pageNotFound() {
         StringBuilder out = new StringBuilder();
