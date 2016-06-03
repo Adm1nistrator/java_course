@@ -68,15 +68,17 @@ class HtmlCreator {
 
     private static String extractUrl(File currentFile, String rootPath) throws IOException {
         String fullPath = currentFile.getAbsolutePath();
+        StringBuilder sb = new StringBuilder(fullPath);
+
         if (!fullPath.startsWith(rootPath)) {
             throw new IllegalStateException("Не допустимыый путь : " + fullPath);
         } else if (fullPath.equals(rootPath))
         {
             return "/";
         } else {
-            Integer end = fullPath.length();
-            System.out.println("URL : " + fullPath.substring(rootPath.length(), end));
-            return fullPath.substring(rootPath.length(), end);
+            Integer end = rootPath.length()-2;
+            System.out.println("URL : " + sb.delete(0,end));
+            return sb.delete(0,end).toString();
         }
     }
 
