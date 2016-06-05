@@ -15,8 +15,10 @@ public class Explorer {
 
     public static void main(String[] args) throws IOException {
         File f = new File("icon.png");
-       // String rootPath = "/home/anykey/IdeaProjects/java_course";
-          String rootPath = "d:\\";
+        String rootPath = "//home//anykey//IdeaProjects//java_course";
+       // String root = "//home//anykey//IdeaProjects//java_course";
+
+       //   String rootPath = "d:\\";
         //сервер
         int port = 8888;
         ServerSocket serverSocket = new ServerSocket(port);

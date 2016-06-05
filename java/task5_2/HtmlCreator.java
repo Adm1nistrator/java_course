@@ -3,6 +3,7 @@ package task5_2;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,12 +28,12 @@ class HtmlCreator {
 
     }
 
-    static String fileHead(Integer bodyLength) {
+    static String fileHead(Integer bodyLength, File current) {
         StringBuilder out = new StringBuilder();
         out.append("HTTP/1.1 200 OK\r\n");
         out.append("Server: LocalServer\r\n");
-        out.append("Content-Type:  application/octet-stream\r\n");
-        // out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
+       // out.append("Content-Type:  application/octet-stream\r\n");
+        out.append("Content-Type: ").append(new MimetypesFileTypeMap().getContentType(current)).append("\r\n");
         out.append("Content-Length: ").append(bodyLength).append("\r\n");
         out.append("\r\n");
         //  out.append("\r\n");
@@ -60,31 +61,44 @@ class HtmlCreator {
 
     private static String toUpFolder(File currentFile, String rootPath) throws IOException {
         StringBuilder out = new StringBuilder("");
-        if (currentFile.getParentFile()==null)
-        {
+        String curent= currentFile.getAbsolutePath();
+        String root = rootPath.replace("//", "/");
+
+        if (currentFile.getParentFile() == null) {
             return "";
         }
-        String parentUrl = extractUrl(currentFile.getParentFile(), rootPath);
-        out.append("<a href='").append(parentUrl).append("'> ../</a>");
-        System.out.println("Путь к родительской папке: " + parentUrl);
+        if (curent.equals(root))
+        {
 
-        return out.toString();
+            return "";
+        } else {
+            String parentUrl = extractUrl(currentFile.getParentFile(), rootPath);
+            out.append("<a href='").append(parentUrl).append("'> ../</a>");
+            System.out.println("Путь к родительской папке: " + parentUrl);
+
+            return out.toString();
+        }
     }
 
     private static String extractUrl(File currentFile, String rootPath) throws IOException {
-        String fullPath = currentFile.getAbsolutePath();
+        String fullPath = currentFile.getAbsolutePath().replace("/", File.separator).replace("%20", " ");
+        String root = rootPath.replace("//", "/");
         StringBuilder sb = new StringBuilder(fullPath);
 
-        if (!fullPath.startsWith(rootPath)) {
-            throw new IllegalStateException("Не допустимыый путь : " + fullPath);
-        } else if (fullPath.equals(rootPath))
-        {
-            return "/";
-        } else {
-            Integer end = rootPath.length()-2;
-            System.out.println("URL : " + sb.delete(0,end));
-            return sb.delete(0,end).toString();
-        }
+
+            if (!fullPath.startsWith(root)) {
+                throw new IllegalStateException("Не допустимыый путь : " + fullPath);
+            } else if (fullPath.equals(root)) {
+                return "/";
+            } else {
+                Integer end = rootPath.length() - 4;
+                String out= sb.delete(0, end).toString();
+                System.out.println("fullpath : " + fullPath);
+                System.out.println("URL : " + out);
+
+                return out;
+            }
+
     }
 
     static String renderDirectoryHtml(File currentFile, String rootPath) throws IOException {
@@ -129,12 +143,20 @@ class HtmlCreator {
 
     }
 
-   static byte[] getFile(String catalogName) throws IOException {
+   /* static byte[] getFile(String catalogName) throws IOException {
         Path path = Paths.get(catalogName);
+
         byte data[] = Files.readAllBytes(path);
 
         return data;
 
+    }*/
+
+    static String getFile(String catalogName)
+            throws IOException
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(catalogName));
+        return new String(encoded);
     }
 
     static String pageNotFound() {
@@ -145,20 +167,6 @@ class HtmlCreator {
         out.append("такой страницы нет");
         out.append("</html></body>");
         return out.toString();
-    }
-
-    private static List<File> getFileList(File current) {
-        List<File> result = new ArrayList<>();
-        if (current.exists() & current.isDirectory()) {
-            File[] files = current.listFiles();
-            if (files == null) {
-                return result;
-            } else {
-                Collections.addAll(result, files);
-            }
-
-        }
-        return result;
     }
 
     private static String getSizeFile(File file) {

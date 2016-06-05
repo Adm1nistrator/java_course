@@ -2,9 +2,7 @@ package task5_2;
 
 import com.sun.istack.internal.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -66,11 +64,19 @@ public class ClientConnection implements Runnable {
             return;
         }
         System.out.println("Текйщий фаил :" + current.length());
-        outputStream.write(HtmlCreator.fileHead(HtmlCreator.getBodyLength(HtmlCreator.getFile(catalogName))).getBytes());
-        outputStream.write(HtmlCreator.getFile(catalogName));
-
+        outputStream.write(HtmlCreator.fileHead(HtmlCreator.getBodyLength(HtmlCreator.getFile(catalogName)), current).getBytes());
+        FileInputStream fis = new FileInputStream(current);
+        byte buf[] = new byte[4096];
+        int count;
+        while ((count = fis.read(buf)) >= 0) {
+            //   writefile();
+            outputStream.write(buf, 0, count);
+        }
+        outputStream.flush();
         return;
 
 
     }
+
+
 }
